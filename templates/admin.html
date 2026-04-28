@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數據看板 | 品味茶飲</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body style="padding-bottom: 4rem;">
+    <header>
+        <div class="logo">
+            <i class="fas fa-chart-pie"></i>
+            <span>經營分析數據</span>
+        </div>
+        <nav>
+            <a href="/" class="category-btn" style="text-decoration: none;">
+                <i class="fas fa-shopping-cart"></i> 返回點餐頁面
+            </a>
+        </nav>
+    </header>
+
+    <main class="container" style="display: block;">
+        <div class="stats-grid">
+            <div class="stat-card glass">
+                <span style="color: var(--text-muted); font-weight: 600;">總累積金額</span>
+                <span id="revenue-val" class="stat-value">$0.00</span>
+            </div>
+            <div class="stat-card glass">
+                <span style="color: var(--text-muted); font-weight: 600;">總訂單數</span>
+                <span id="orders-val" class="stat-value">0</span>
+            </div>
+        </div>
+
+        <div class="stats-grid" style="margin-top: 2rem;">
+            <div class="glass" style="padding: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">每日營業額趨勢</h3>
+                <canvas id="salesChart"></canvas>
+            </div>
+            <div class="glass" style="padding: 2rem;">
+                <h3 style="margin-bottom: 1.5rem;">熱銷產品排行</h3>
+                <canvas id="topItemsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Grok AI Insight Section -->
+        <div class="glass"
+            style="margin-top: 2rem; padding: 2rem; border: 1px solid rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(88, 28, 135, 0.1), rgba(15, 23, 42, 0.05));">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-brain" style="color: #a855f7;"></i> Grok AI 經營智慧分析
+                </h3>
+                <button id="grok-btn" class="checkout-btn"
+                    style="width: auto; padding: 10px 25px; background: linear-gradient(to right, #a855f7, #6366f1);">
+                    獲取 AI 洞察
+                </button>
+            </div>
+            <div id="grok-result"
+                style="line-height: 1.6; color: var(--text-main); font-size: 1rem; min-height: 100px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px;">
+                <span style="color: var(--text-muted);">點擊按鈕，讓 Grok 幫您分析當前經營狀況...</span>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/admin.js"></script>
+</body>
+
+</html>

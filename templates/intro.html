@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>品味茶飲 POS 系統 | 智慧語音介紹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1; /* Indigo */
+            --secondary: #a855f7; /* Purple */
+            --accent: #22d3ee; /* Cyan */
+            --bg: #0f172a; /* Slate 900 */
+            --glass: rgba(255, 255, 255, 0.05);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Hero Section */
+        .intro-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.4)), url('/static/img/intro_hero.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #60a5fa, #c084fc, #2dd4bf);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.8s;
+        }
+
+        .start-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1.2rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 1.2s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Feature Sections */
+        .feature-section {
+            padding: 10rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-image {
+            width: 50%;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: 1s all ease-out;
+        }
+
+        .feature-content {
+            width: 50%;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: 1s all ease-out;
+        }
+
+        .feature-section.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .feature-section.active .feature-image,
+        .feature-section.active .feature-content {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .feature-tag {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .feature-h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .feature-p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        /* Voice Status Indicator */
+        #voice-status {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse-animation 1.5s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 5rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            padding: 4rem;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Scroll Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            width: 0%;
+            z-index: 1001;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .feature-section { flex-direction: column; text-align: center; padding: 5rem 1.5rem; }
+            .feature-image, .feature-content { width: 100%; transform: translateY(30px); }
+            .feature-section.reverse { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div id="voice-status">
+        <div class="pulse"></div>
+        <span>語音導覽進行中...</span>
+    </div>
+
+    <!-- Hero -->
+    <section class="intro-container">
+        <h1 class="hero-title">品味茶飲 POS 系統</h1>
+        <p class="hero-subtitle">下一代智慧經營夥伴，成就您的飲品王國</p>
+        <button class="start-btn" onclick="startIntro()">
+            <i class="fas fa-play"></i> 開始導覽介紹
+        </button>
+    </section>
+
+    <!-- Step 1: Ordering -->
+    <section id="s1" class="feature-section">
+        <img src="/static/img/intro_pos.png" alt="POS UI" class="feature-image">
+        <div class="feature-content">
+            <span class="feature-tag">極簡美學</span>
+            <h2 class="feature-h2">直觀易用的<br>極速點餐體驗</h2>
+            <p class="feature-p">
+                採用現代化的玻璃擬態設計，不論是店員操作還是顧客點餐，
+                都能在流暢的介面中快速完成。類別清晰、圖片豐富，讓每一杯飲料都充滿吸引力。
+            </p>
+        </div>
+    </section>
+
+    <!-- Step 2: Insights -->
+    <section id="s2" class="feature-section reverse">
+        <img src="/static/img/intro_ai.png" alt="AI Dashboard" class="feature-image">
+        <div class="feature-content">
+            <span class="feature-tag">智慧大腦</span>
+            <h2 class="feature-h2">結合 Grok AI<br>深入經營核心</h2>
+            <p class="feature-p">
+                不只是記錄銷售。系統整合 x.ai 強大模型，實時分析您的營收數據。
+                Grok 會為您找出熱銷組合、銷售盲點，並提供具體的促銷建議，打造會思考的生意。
+            </p>
+        </div>
+    </section>
+
+    <!-- Step 3: Management -->
+    <section id="s3" class="feature-section">
+        <img src="/static/img/intro_hero.png" alt="Shop" class="feature-image">
+        <div class="feature-content">
+            <span class="feature-tag">全局掌控</span>
+            <h2 class="feature-h2">多端同步<br>隨時掌控營收</h2>
+            <p class="feature-p">
+                內置輕量化伺服器，支援行動裝置隨時查看。無論是平板還是手機，
+                都能在相同的局域網下查看營收報表與庫存狀況，讓管理變得輕而易舉。
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="cta-box">
+            <h2 class="feature-h2">準備好開始了嗎？</h2>
+            <p class="feature-p" style="margin-bottom: 2rem;">
+                體驗最先進的智慧 POS 系統，讓您的經營事半功倍。
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a href="/" class="start-btn" style="text-decoration: none;">進入系統</a>
+                <a href="/admin" class="start-btn" style="text-decoration: none; background: var(--glass);">查看後端</a>
+            </div>
+        </div>
+        <p style="margin-top: 4rem; color: var(--text-muted); font-size: 0.9rem;">
+            &copy; 2026 Sip & Savor POS System. Powered by Grok AI.
+        </p>
+    </footer>
+
+    <script>
+        let currentAudio = null;
+        let lastPlayedId = null;
+
+        const scripts = [
+            { id: 'hero', text: '歡迎來到品味茶飲 POS 系統，您的智慧經營新夥伴，助您成就飲品王國。' },
+            { id: 's1', text: '首先是我們的點餐體驗。我們提供極簡、優雅的流程，讓每位客人的點餐都成為一種視覺享受。' },
+            { id: 's2', text: '接著是智慧大腦。系統結合 Grok AI 智慧分析，不只是記錄，更能為您提供具體的促銷建議。' },
+            { id: 's3', text: '最後是全局掌控。您可以隨時隨地查看營收報表，讓店務管理變得輕鬆簡單。' },
+            { id: 'end', text: '準備好開始了嗎？現在就體驗最先進的智慧商務，讓您的經營事半功倍。' }
+        ];
+
+        async function speak(text) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+
+            const status = document.getElementById('voice-status');
+            status.style.display = 'flex';
+            status.style.opacity = '1';
+
+            try {
+                const url = `/api/tts?text=${encodeURIComponent(text)}`;
+                const audio = new Audio(url);
+                currentAudio = audio;
+                
+                audio.onended = () => {
+                    status.style.opacity = '0';
+                    setTimeout(() => {
+                        status.style.display = 'none';
+                    }, 500);
+                };
+
+                await audio.play();
+            } catch (err) {
+                console.error("Audio playback error:", err);
+                status.style.display = 'none';
+            }
+        }
+
+        function startIntro() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lastPlayedId = 'hero';
+            speak(scripts[0].text);
+            
+            setTimeout(() => {
+                document.getElementById('s1').scrollIntoView({ behavior: 'smooth' });
+            }, 6000);
+        }
+
+        const sections = document.querySelectorAll('.feature-section');
+        const observerOptions = { threshold: 0.5 };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const script = scripts.find(s => s.id === entry.target.id);
+                    if (script && lastPlayedId !== script.id) {
+                        lastPlayedId = script.id;
+                        speak(script.text);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+    </script>
+</body>
+</html>
